@@ -19,7 +19,7 @@ const farmers = {
     timeOfSowing: "3 June",
     transplanting: "25 July",
     varietyDevelopedBy: "ICAR - Indian Institute of Rice Research",
-    seedTakenFrom: "Bharat-Plus Solutions",
+    seedTakenFrom: "HarvestPlus Solutions",
     fertilizersUsed: "Urea 60 kg, Potash 60 kg",
     irrigation: "Rainwater",
   },
