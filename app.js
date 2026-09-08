@@ -30,7 +30,7 @@ const farmers = {
   The QR code will use this URL plus /farmer/FARMER_ID.
   Do not use a localhost URL here.
 */
-const publishedProfileUrl = "";
+const publishedProfileUrl = "https://farmer-qr-profile.vercel.app/";
 
 const defaultFarmerId = "73788671056";
 const pathParts = window.location.pathname.split("/").filter(Boolean);
