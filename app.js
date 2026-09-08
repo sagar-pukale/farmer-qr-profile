@@ -7,7 +7,7 @@ const farmers = {
   "73788671056": {
     id: "73788671056",
     name: "Mr. Jagdish Zade",
-    photo: "/images/jagdish-zade.jpg",
+    photo: "/images/Jagdish%20sir.jpeg",
     village: "Randha, Kh.",
     taluka: "Akole",
     district: "Ahilyanagar",
