@@ -37,14 +37,19 @@ const pathParts = window.location.pathname.split("/").filter(Boolean);
 const farmerIdFromUrl = pathParts[0] === "farmer" ? pathParts[1] : "";
 const qrFarmerIdFromUrl = pathParts[0] === "qr" ? pathParts[1] : "";
 const selectedFarmerId = farmerIdFromUrl || qrFarmerIdFromUrl || defaultFarmerId;
-const isQrView = pathParts[0] === "qr";
-const isPublicProfileView = pathParts[0] === "farmer";
+const currentView = document.body.dataset.view || "public";
+const isQrView = currentView === "qr";
 const farmer = farmers[selectedFarmerId];
 const siteUrl = publishedProfileUrl.trim().replace(/\/+$/, "");
 const isLocalProfileUrl =
   /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(\/|$)/i.test(siteUrl);
 const canGenerateQrCode = Boolean(isQrView && farmer && siteUrl && !isLocalProfileUrl);
 const profileUrl = farmer ? `${siteUrl}/farmer/${farmer.id}` : "";
+const qrImageUrl = canGenerateQrCode
+  ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&format=png&margin=12&data=${encodeURIComponent(
+      profileUrl
+    )}`
+  : "";
 
 const detailItems = farmer
   ? [
@@ -73,14 +78,6 @@ document.getElementById("farmerName").textContent = farmer
 document.getElementById("farmerLocation").textContent = farmer
   ? `${farmer.village}, ${farmer.taluka}, ${farmer.district}`
   : "Please check the farmer ID in the profile URL.";
-document.getElementById("profileUrl").textContent =
-  canGenerateQrCode
-    ? profileUrl
-    : "Add the final public website URL in app.js after deployment to generate this farmer's QR code.";
-
-if (isPublicProfileView) {
-  document.body.classList.add("public-profile");
-}
 
 const detailsContainer = document.getElementById("farmerDetails");
 detailItems.forEach(([label, value]) => {
@@ -98,52 +95,75 @@ detailItems.forEach(([label, value]) => {
   detailsContainer.appendChild(card);
 });
 
-const qrCodeElement = document.getElementById("qrCode");
-const downloadButton = document.getElementById("downloadQr");
-const qrPanel = document.getElementById("qrPanel");
-const hasQrCodeLibrary = typeof QRCode === "function";
-
-if (isPublicProfileView) {
-  qrPanel.hidden = true;
-} else {
-  qrPanel.hidden = false;
+if (!isQrView) {
+  document.body.classList.add("public-profile");
 }
 
-if (canGenerateQrCode && hasQrCodeLibrary) {
-  new QRCode(qrCodeElement, {
-    text: profileUrl,
-    width: 220,
-    height: 220,
-    colorDark: "#1f2a24",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H,
-  });
-} else {
-  qrCodeElement.className = "qr-setup-message";
-  qrCodeElement.textContent = hasQrCodeLibrary
-    ? "QR code will appear here after you add the public website URL in app.js. Do not use localhost."
-    : "QR code library could not be loaded. Please check your internet connection and reload.";
-  downloadButton.disabled = true;
-}
+if (isQrView) {
+  const qrCodeImage = document.getElementById("qrCodeImage");
+  const profileUrlElement = document.getElementById("profileUrl");
+  const downloadButton = document.getElementById("downloadQr");
+  const printButton = document.getElementById("printProfile");
 
-downloadButton.addEventListener("click", () => {
+  profileUrlElement.textContent = canGenerateQrCode
+    ? profileUrl
+    : "Add a valid public website URL in app.js. Do not use localhost.";
+
   if (!canGenerateQrCode) {
-    alert(
-      "Add the final public website URL in app.js before downloading the QR code. Do not use localhost."
-    );
-    return;
+    qrCodeImage.replaceWith(createQrMessage("QR code cannot be generated without a public URL."));
+    downloadButton.removeAttribute("href");
+    downloadButton.setAttribute("aria-disabled", "true");
+  } else {
+    qrCodeImage.src = qrImageUrl;
+    downloadButton.href = qrImageUrl;
+    downloadButton.download = `${farmer.id}-${farmer.name
+      .replace(/\s+/g, "-")
+      .toLowerCase()}-qr-code.png`;
+    downloadButton.addEventListener("click", downloadQrImage);
+
+    qrCodeImage.addEventListener("load", () => {
+      downloadButton.removeAttribute("aria-disabled");
+    });
+
+    qrCodeImage.addEventListener("error", () => {
+      qrCodeImage.replaceWith(
+        createQrMessage("QR code could not be loaded. Please check your internet connection and reload.")
+      );
+      downloadButton.removeAttribute("href");
+      downloadButton.setAttribute("aria-disabled", "true");
+    });
   }
 
-  const canvas = document.querySelector("#qrCode canvas");
-  const image = document.querySelector("#qrCode img");
-  const qrSource = canvas ? canvas.toDataURL("image/png") : image.src;
+  printButton.addEventListener("click", () => {
+    window.print();
+  });
+}
 
-  const link = document.createElement("a");
-  link.href = qrSource;
-  link.download = `${farmer.id}-${farmer.name.replace(/\s+/g, "-").toLowerCase()}-qr-code.png`;
-  link.click();
-});
+async function downloadQrImage(event) {
+  event.preventDefault();
 
-document.getElementById("printProfile").addEventListener("click", () => {
-  window.print();
-});
+  try {
+    const response = await fetch(qrImageUrl);
+    if (!response.ok) {
+      throw new Error("QR image download failed.");
+    }
+
+    const imageBlob = await response.blob();
+    const objectUrl = URL.createObjectURL(imageBlob);
+    const link = document.createElement("a");
+
+    link.href = objectUrl;
+    link.download = event.currentTarget.download;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+  } catch (_error) {
+    window.open(qrImageUrl, "_blank", "noopener");
+  }
+}
+
+function createQrMessage(message) {
+  const messageElement = document.createElement("div");
+  messageElement.className = "qr-setup-message";
+  messageElement.textContent = message;
+  return messageElement;
+}

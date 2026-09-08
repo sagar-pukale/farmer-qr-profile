@@ -4,9 +4,10 @@ This is a simple static web application for showing a farmer profile and generat
 
 ## Files
 
-- `index.html` - Main farmer profile page.
+- `index.html` - Public read-only farmer profile page.
+- `qr.html` - Separate QR generator and QR print page.
 - `styles.css` - Mobile-friendly layout and professional farming style.
-- `app.js` - Farmer data, QR code generation, download button, and print button.
+- `app.js` - Farmer data, public profile rendering, and QR generator logic.
 
 ## Change Farmer Information
 
@@ -42,7 +43,7 @@ To add more farmers later, add another entry inside `farmers` using the new farm
 Run a simple local server from this folder:
 
 ```bash
-npx serve -s .
+npx serve .
 ```
 
 Then open:

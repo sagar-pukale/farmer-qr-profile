@@ -154,15 +154,10 @@ h2 {
   background: #f8faf6;
 }
 
-#qrCode {
-  width: 220px;
-  height: 220px;
-}
-
-#qrCode img,
-#qrCode canvas {
-  width: 220px;
-  height: 220px;
+#qrCodeImage {
+  display: block;
+  width: 260px;
+  height: 260px;
 }
 
 .qr-setup-message {
@@ -187,7 +182,10 @@ h2 {
   gap: 10px;
 }
 
-button {
+button,
+.button {
+  display: inline-grid;
+  place-items: center;
   min-height: 44px;
   border: 0;
   border-radius: 6px;
@@ -196,24 +194,30 @@ button {
   cursor: pointer;
   font: inherit;
   font-weight: 700;
+  text-decoration: none;
 }
 
-button:hover {
+button:hover,
+.button:hover {
   background: var(--primary-dark);
 }
 
-button:disabled {
+button:disabled,
+.button[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.55;
+  pointer-events: none;
 }
 
-button.secondary {
+button.secondary,
+.button.secondary {
   border: 1px solid var(--line);
   background: #ffffff;
   color: var(--primary-dark);
 }
 
-button.secondary:hover {
+button.secondary:hover,
+.button.secondary:hover {
   background: #eef5e9;
 }
 
@@ -256,7 +260,8 @@ button.secondary:hover {
     break-inside: avoid;
   }
 
-  button {
+  button,
+  .button {
     display: none;
   }
 }

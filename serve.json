@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/farmer/:id",
+      "source": "/farmer/**",
       "destination": "/index.html"
     },
     {
-      "source": "/qr/:id",
+      "source": "/qr/**",
       "destination": "/qr.html"
     }
   ]

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer QR Generator</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-view="qr">
+    <main class="page">
+      <section class="profile-header">
+        <div>
+          <p class="eyebrow">QR Generator</p>
+          <h1 id="farmerName">Farmer Name</h1>
+          <p class="location" id="farmerLocation">Village, Taluka, District</p>
+        </div>
+        <div class="badge">Farmer QR</div>
+      </section>
+
+      <section class="content-grid">
+        <div class="details-panel">
+          <h2>Farmer Information</h2>
+          <div class="info-grid" id="farmerDetails"></div>
+        </div>
+
+        <aside class="qr-panel" id="qrPanel">
+          <h2>Profile QR Code</h2>
+          <p class="qr-note">This QR code opens the public farmer profile page.</p>
+          <div class="qr-box">
+            <img id="qrCodeImage" alt="QR code for public farmer profile" />
+          </div>
+          <p class="profile-url" id="profileUrl"></p>
+          <div class="actions">
+            <a class="button" id="downloadQr" href="#" download>Download QR PNG</a>
+            <button type="button" class="secondary" id="printProfile">Print QR</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

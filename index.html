@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Farmer Profile QR</title>
+    <title>Farmer Profile</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
-  <body>
+  <body data-view="public">
     <main class="page">
       <section class="profile-header">
         <div>
@@ -23,22 +23,9 @@
           <div class="info-grid" id="farmerDetails"></div>
         </div>
 
-        <aside class="qr-panel" id="qrPanel" hidden>
-          <h2>Scan Profile QR</h2>
-          <p class="qr-note">This QR code opens the farmer profile page URL.</p>
-          <div class="qr-box">
-            <div id="qrCode"></div>
-          </div>
-          <p class="profile-url" id="profileUrl"></p>
-          <div class="actions">
-            <button type="button" id="downloadQr">Download QR PNG</button>
-            <button type="button" class="secondary" id="printProfile">Print QR</button>
-          </div>
-        </aside>
       </section>
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="/app.js"></script>
   </body>
 </html>
