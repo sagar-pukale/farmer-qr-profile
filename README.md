@@ -51,6 +51,14 @@ Then open:
 http://localhost:3000/farmer/73788671056
 ```
 
+This public farmer profile route shows only the farmer information.
+
+Use this separate QR generation route when you need to download or print the QR code:
+
+```text
+http://localhost:3000/qr/73788671056
+```
+
 ## QR Code
 
 The QR code contains the farmer profile page URL, not the farmer's plain text details.
@@ -69,7 +77,11 @@ The QR code for this farmer will point to:
 https://your-public-site-url.com/farmer/73788671056
 ```
 
-Then reload the page and click **Download QR PNG**.
+Then open the QR generation view and click **Download QR PNG**:
+
+```text
+https://your-public-site-url.com/qr/73788671056
+```
 
 ## Publish Online With Vercel
 
@@ -83,7 +95,10 @@ Steps:
 4. Copy the Vercel project URL, for example `https://farmer-profile.vercel.app/`.
 5. Paste that base URL into `publishedProfileUrl` inside `app.js`.
 6. Deploy the updated files again.
-7. Open the final Vercel URL.
-8. Click **Download QR PNG**.
+7. Open the final public farmer profile URL:
+   `https://farmer-profile.vercel.app/farmer/73788671056`
+8. Open the QR generation URL:
+   `https://farmer-profile.vercel.app/qr/73788671056`
+9. Click **Download QR PNG**.
 
 Now the QR code can be scanned from another person's phone and will open the online farmer profile.

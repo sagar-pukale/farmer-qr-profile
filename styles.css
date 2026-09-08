@@ -90,6 +90,10 @@ h2 {
   margin-top: 20px;
 }
 
+.public-profile .content-grid {
+  grid-template-columns: 1fr;
+}
+
 .details-panel,
 .qr-panel {
   border: 1px solid var(--line);
@@ -128,6 +132,10 @@ h2 {
 
 .qr-panel {
   text-align: center;
+}
+
+.qr-panel[hidden] {
+  display: none;
 }
 
 .qr-note {

@@ -35,12 +35,15 @@ const publishedProfileUrl = "https://farmer-qr-profile.vercel.app/";
 const defaultFarmerId = "73788671056";
 const pathParts = window.location.pathname.split("/").filter(Boolean);
 const farmerIdFromUrl = pathParts[0] === "farmer" ? pathParts[1] : "";
-const selectedFarmerId = farmerIdFromUrl || defaultFarmerId;
+const qrFarmerIdFromUrl = pathParts[0] === "qr" ? pathParts[1] : "";
+const selectedFarmerId = farmerIdFromUrl || qrFarmerIdFromUrl || defaultFarmerId;
+const isQrView = pathParts[0] === "qr";
+const isPublicProfileView = pathParts[0] === "farmer";
 const farmer = farmers[selectedFarmerId];
 const siteUrl = publishedProfileUrl.trim().replace(/\/+$/, "");
 const isLocalProfileUrl =
   /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(\/|$)/i.test(siteUrl);
-const canGenerateQrCode = Boolean(farmer && siteUrl && !isLocalProfileUrl);
+const canGenerateQrCode = Boolean(isQrView && farmer && siteUrl && !isLocalProfileUrl);
 const profileUrl = farmer ? `${siteUrl}/farmer/${farmer.id}` : "";
 
 const detailItems = farmer
@@ -75,6 +78,10 @@ document.getElementById("profileUrl").textContent =
     ? profileUrl
     : "Add the final public website URL in app.js after deployment to generate this farmer's QR code.";
 
+if (isPublicProfileView) {
+  document.body.classList.add("public-profile");
+}
+
 const detailsContainer = document.getElementById("farmerDetails");
 detailItems.forEach(([label, value]) => {
   const card = document.createElement("article");
@@ -93,7 +100,14 @@ detailItems.forEach(([label, value]) => {
 
 const qrCodeElement = document.getElementById("qrCode");
 const downloadButton = document.getElementById("downloadQr");
+const qrPanel = document.getElementById("qrPanel");
 const hasQrCodeLibrary = typeof QRCode === "function";
+
+if (isPublicProfileView) {
+  qrPanel.hidden = true;
+} else {
+  qrPanel.hidden = false;
+}
 
 if (canGenerateQrCode && hasQrCodeLibrary) {
   new QRCode(qrCodeElement, {

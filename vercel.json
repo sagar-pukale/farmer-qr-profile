@@ -3,6 +3,10 @@
     {
       "source": "/farmer/:id",
       "destination": "/index.html"
+    },
+    {
+      "source": "/qr/:id",
+      "destination": "/index.html"
     }
   ]
 }
