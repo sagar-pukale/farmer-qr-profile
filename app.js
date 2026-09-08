@@ -7,6 +7,7 @@ const farmers = {
   "73788671056": {
     id: "73788671056",
     name: "Mr. Jagdish Zade",
+    photo: "/images/jagdish-zade.jpg",
     village: "Randha, Kh.",
     taluka: "Akole",
     district: "Ahilyanagar",
@@ -78,6 +79,16 @@ document.getElementById("farmerName").textContent = farmer
 document.getElementById("farmerLocation").textContent = farmer
   ? `${farmer.village}, ${farmer.taluka}, ${farmer.district}`
   : "Please check the farmer ID in the profile URL.";
+
+const farmerPhoto = document.getElementById("farmerPhoto");
+if (farmerPhoto) {
+  if (farmer?.photo) {
+    farmerPhoto.src = farmer.photo;
+    farmerPhoto.alt = `${farmer.name} profile photo`;
+  } else {
+    farmerPhoto.remove();
+  }
+}
 
 const detailsContainer = document.getElementById("farmerDetails");
 detailItems.forEach(([label, value]) => {
