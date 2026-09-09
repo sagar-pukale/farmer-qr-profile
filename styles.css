@@ -59,6 +59,11 @@ body {
   object-position: center;
 }
 
+.farmer-photo.uncropped-photo {
+  background: #ffffff;
+  object-fit: contain;
+}
+
 .eyebrow {
   margin: 0 0 6px;
   color: var(--primary);

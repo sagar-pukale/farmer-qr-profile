@@ -11,13 +11,15 @@ This is a simple static web application for showing a farmer profile and generat
 
 ## Change Farmer Information
 
-Open `app.js` and update the `farmers` object near the top of the file. For now, the app contains only one farmer:
+Open `app.js` and update the `farmers` object near the top of the file. Each farmer record has its own route key and photo path:
 
 ```js
 const farmers = {
   "73788671056": {
+    routeId: "73788671056",
     id: "73788671056",
     name: "Mr. Jagdish Zade",
+    photo: "/images/Jagdish%20sir.jpeg",
     village: "Randha, Kh.",
     taluka: "Akole",
     district: "Ahilyanagar",
@@ -29,14 +31,14 @@ const farmers = {
     timeOfSowing: "3 June",
     transplanting: "25 July",
     varietyDevelopedBy: "ICAR - Indian Institute of Rice Research",
-    seedTakenFrom: "Bharat-Plus Solutions",
+    seedTakenFrom: "HarvestPlus Solutions",
     fertilizersUsed: "Urea 60 kg, Potash 60 kg",
     irrigation: "Rainwater",
   },
 };
 ```
 
-To add more farmers later, add another entry inside `farmers` using the new farmer ID as the key.
+To add more farmers later, add another entry inside `farmers` using the new farmer ID as the key. If a Farmer ID is not available yet, use a unique route key, but leave the `id` value blank.
 
 ## Run Locally
 
@@ -50,6 +52,8 @@ Then open:
 
 ```text
 http://localhost:3000/farmer/73788671056
+http://localhost:3000/farmer/thakubai-sampat-lore
+http://localhost:3000/farmer/11103904904
 ```
 
 This public farmer profile route shows only the farmer information.
@@ -58,6 +62,8 @@ Use this separate QR generation route when you need to download or print the QR 
 
 ```text
 http://localhost:3000/qr/73788671056
+http://localhost:3000/qr/thakubai-sampat-lore
+http://localhost:3000/qr/11103904904
 ```
 
 ## QR Code

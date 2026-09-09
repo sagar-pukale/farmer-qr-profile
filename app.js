@@ -5,6 +5,7 @@
 */
 const farmers = {
   "73788671056": {
+    routeId: "73788671056",
     id: "73788671056",
     name: "Mr. Jagdish Zade",
     photo: "/images/Jagdish%20sir.jpeg",
@@ -21,6 +22,48 @@ const farmers = {
     varietyDevelopedBy: "ICAR - Indian Institute of Rice Research",
     seedTakenFrom: "HarvestPlus Solutions",
     fertilizersUsed: "Urea 60 kg, Potash 60 kg",
+    irrigation: "Rainwater",
+  },
+  "thakubai-sampat-lore": {
+    routeId: "thakubai-sampat-lore",
+    id: "",
+    name: "Thakubai Sampat Lore",
+    photo: "/images/Thakubai.jpeg",
+    showFullPhoto: true,
+    village: "Randha",
+    taluka: "Akole",
+    district: "Ahilyanagar",
+    totalLandHolding: "6 Acre",
+    cropName: "Zinc Paddy",
+    currentCropArea: "1 Acre",
+    contactNo: "",
+    biofortifiedVarietyGrown: "DRR-48",
+    timeOfSowing: "5 June",
+    transplanting: "22 July",
+    varietyDevelopedBy: "ICAR - Indian Institute of Rice Research",
+    seedTakenFrom: "HarvestPlus Solutions",
+    fertilizersUsed: "Urea 30 kg, Potash 30 kg",
+    irrigation: "Rainwater",
+  },
+  "11103904904": {
+    routeId: "11103904904",
+    id: "11103904904",
+    name: "Ajit Lakshman Bhangare",
+    photo: "/images/Ajit%20Sir.jpeg",
+    showFullPhoto: true,
+    village: "Khadaki Bk",
+    taluka: "Akole",
+    district: "Ahilyanagar",
+    totalLandHolding: "5 Acre",
+    cropName: "Zinc Paddy",
+    currentCropArea: "3 Acre",
+    contactNo: "9403038591",
+    biofortifiedVarietyGrown: "DRR-48",
+    timeOfSowing: "17 June",
+    transplanting: "22 July",
+    varietyDevelopedBy: "ICAR - Indian Institute of Rice Research",
+    seedTakenFrom: "HarvestPlus Solutions",
+    fertilizersUsed: "Urea 105 kg, Potash 100 kg",
     irrigation: "Rainwater",
   },
 };
@@ -45,7 +88,7 @@ const siteUrl = publishedProfileUrl.trim().replace(/\/+$/, "");
 const isLocalProfileUrl =
   /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(\/|$)/i.test(siteUrl);
 const canGenerateQrCode = Boolean(isQrView && farmer && siteUrl && !isLocalProfileUrl);
-const profileUrl = farmer ? `${siteUrl}/farmer/${farmer.id}` : "";
+const profileUrl = farmer ? `${siteUrl}/farmer/${encodeURIComponent(farmer.routeId)}` : "";
 const qrImageUrl = canGenerateQrCode
   ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&format=png&margin=12&data=${encodeURIComponent(
       profileUrl
@@ -85,6 +128,9 @@ if (farmerPhoto) {
   if (farmer?.photo) {
     farmerPhoto.src = farmer.photo;
     farmerPhoto.alt = `${farmer.name} profile photo`;
+    if (farmer.showFullPhoto) {
+      farmerPhoto.classList.add("uncropped-photo");
+    }
   } else {
     farmerPhoto.remove();
   }
@@ -127,7 +173,7 @@ if (isQrView) {
   } else {
     qrCodeImage.src = qrImageUrl;
     downloadButton.href = qrImageUrl;
-    downloadButton.download = `${farmer.id}-${farmer.name
+    downloadButton.download = `${farmer.routeId}-${farmer.name
       .replace(/\s+/g, "-")
       .toLowerCase()}-qr-code.png`;
     downloadButton.addEventListener("click", downloadQrImage);
