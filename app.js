@@ -94,6 +94,11 @@ const qrImageUrl = canGenerateQrCode
       profileUrl
     )}`
   : "";
+const downloadQrImageUrl = canGenerateQrCode
+  ? `https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&format=png&margin=40&data=${encodeURIComponent(
+      profileUrl
+    )}`
+  : "";
 
 const detailItems = farmer
   ? [
@@ -173,9 +178,7 @@ if (isQrView) {
   } else {
     qrCodeImage.src = qrImageUrl;
     downloadButton.href = qrImageUrl;
-    downloadButton.download = `${farmer.routeId}-${farmer.name
-      .replace(/\s+/g, "-")
-      .toLowerCase()}-qr-code.png`;
+    downloadButton.download = getQrDownloadFileName(farmer.name);
     downloadButton.addEventListener("click", downloadQrImage);
 
     qrCodeImage.addEventListener("load", () => {
@@ -200,7 +203,7 @@ async function downloadQrImage(event) {
   event.preventDefault();
 
   try {
-    const response = await fetch(qrImageUrl);
+    const response = await fetch(downloadQrImageUrl);
     if (!response.ok) {
       throw new Error("QR image download failed.");
     }
@@ -211,11 +214,26 @@ async function downloadQrImage(event) {
 
     link.href = objectUrl;
     link.download = event.currentTarget.download;
+    link.style.display = "none";
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(objectUrl);
+    link.remove();
+    window.setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+    }, 1000);
   } catch (_error) {
-    window.open(qrImageUrl, "_blank", "noopener");
+    window.open(downloadQrImageUrl || qrImageUrl, "_blank", "noopener");
   }
+}
+
+function getQrDownloadFileName(farmerName) {
+  const cleanName = farmerName
+    .replace(/^(mr|mrs|ms|dr)\.?\s+/i, "")
+    .trim()
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return `${cleanName}-QR.png`;
 }
 
 function createQrMessage(message) {
